@@ -1,5 +1,6 @@
 $cell_color: white;
 $grid_color: gray;
+$active_grid_color: #fe3;
 
 $cell_size: 9.5vmin;
 $grid_padding: 1.5vmin;
@@ -56,6 +57,11 @@ main {
 	background: $cell_color;
 }
 
+.grid.active {
+	background: $active_grid_color;
+	box-shadow: 0 0 5vmin $active_grid_color;
+}
+
 .cell {
 	text-align: center;
 	vertical-align: middle;
@@ -68,6 +74,11 @@ main {
 .cell.col3 { border-right:  $grid_padding solid $cell_color; }
 .cell.row1 { border-top:    $grid_padding solid $cell_color; }
 .cell.row3 { border-bottom: $grid_padding solid $cell_color; }
+
+.active .cell.col1 { border-left-color:   $active_grid_color; }
+.active .cell.col3 { border-right-color:  $active_grid_color; }
+.active .cell.row1 { border-top-color:    $active_grid_color; }
+.active .cell.row3 { border-bottom-color: $active_grid_color; }
 
 .cell.x {color: red; } 
 .cell.o {color: blue; font-size: 130%; font-weight: bold;}

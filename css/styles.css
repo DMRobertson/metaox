@@ -35,6 +35,10 @@ main {
 .grid {
   background: white; }
 
+.grid.active {
+  background: #fe3;
+  box-shadow: 0 0 5vmin #fe3; }
+
 .cell {
   text-align: center;
   vertical-align: middle;
@@ -53,6 +57,18 @@ main {
 
 .cell.row3 {
   border-bottom: 1.5vmin solid white; }
+
+.active .cell.col1 {
+  border-left-color: #fe3; }
+
+.active .cell.col3 {
+  border-right-color: #fe3; }
+
+.active .cell.row1 {
+  border-top-color: #fe3; }
+
+.active .cell.row3 {
+  border-bottom-color: #fe3; }
 
 .cell.x {
   color: red; }
