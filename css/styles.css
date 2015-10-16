@@ -1,22 +1,37 @@
+html, body, main {
+  height: 100%;
+  width: 100%; }
+
+body {
+  display: table;
+  vertical-align: middle; }
+
+main {
+  position: relative;
+  vertical-align: middle;
+  display: table-cell; }
+
+.metagrid {
+  width: 90vmin;
+  background: white;
+  margin: auto; }
+
 .grid, .cell {
   box-sizing: border-box;
   border-collapse: separate;
   text-align: center;
   vertical-align: middle; }
 
-.metagrid, .grid {
-  width: 100%;
+.grid {
   padding: 5px; }
 
 .metagrid > tbody > tr > td, .metagrid {
   border: 4px outset grey; }
 
-.metagrid {
-  background: white; }
-
 .cell {
   padding: 10px;
-  width: 33.3%;
+  width: 10vmin;
+  height: 10vmin;
   background: white;
   border-width: 1px;
   border-color: rgba(0, 0, 0, 0.15); }

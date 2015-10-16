@@ -1,5 +1,27 @@
 $cell_background_color: white;
 
+html, body, main {
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	display: table;
+	vertical-align: middle;
+}
+
+main {
+	position: relative;
+	vertical-align: middle;
+	display: table-cell;
+}
+
+.metagrid {
+	width: 90vmin;
+	background: $cell_background_color;
+	margin: auto;
+}
+
 .grid, .cell {
 	box-sizing: border-box;
 	border-collapse: separate;
@@ -7,8 +29,7 @@ $cell_background_color: white;
 	vertical-align: middle;
 }
 
-.metagrid, .grid {
-	width: 100%;
+.grid {
 	padding: 5px;
 }
 
@@ -16,23 +37,15 @@ $cell_background_color: white;
 	border: 4px outset grey;
 }
 
-.metagrid {
-	background: $cell_background_color;
-}
-
 .cell {
 	padding: 10px;
-	width: 33.3%;
+	width: 10vmin;
+	height: 10vmin;
 	background: $cell_background_color;
 	border-width: 1px;
 	border-color: rgba(0, 0, 0, 0.15);
 }
 
-.cell.col1, .cell.col2 {
-	border-right-style: solid;
-}
-
-.cell.row1, .cell.row2 {
-	border-bottom-style: solid;
-}
+.cell.col1, .cell.col2 { border-right-style: solid;  }
+.cell.row1, .cell.row2 { border-bottom-style: solid; }
 

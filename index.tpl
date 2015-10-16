@@ -20,13 +20,7 @@
 	</head>
 	<!--TODO: Javascript for showing/hiding abstracts?-->
 	<body>
-		<header>
-			<div class="container">
-				<h1>Meta Noughts and Crosses</h1>
-			</div>
-		</header>
-		
-		<main class="container">
+		<main>
 			<table class="metagrid">
 				{% for i in range(1, 4) %}
 				<tr>
@@ -46,11 +40,8 @@
 				</tr>
 				{% endfor %}
 			</table>
-		</main> <!--container-->
-	
-		<footer>
-		</footer>
-  </body>
+		</main>
+	</body>
   
   <script async defer type="text/javascript" src="script.js" />
 </html>
