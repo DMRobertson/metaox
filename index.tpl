@@ -30,7 +30,8 @@
 							{% for k in range(1, 4) %}
 							<tr>
 								{% for l in range (1, 4) %}
-								<td class="cell row{{k}} col{{l}}" id="cell{{i}}{{j}}{{k}}{{l}}">{{i}}{{j}}{{k}}{{l}}</td>
+								<td class="cell row{{k}} col{{l}} {{'xoxo'[l]}}" id="cell{{i}}{{j}}{{k}}{{l}}">
+								</td>
 								{% endfor %}
 							</tr>
 							{% endfor %}

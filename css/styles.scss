@@ -8,6 +8,7 @@ html, body, main {
 body {
 	display: table;
 	vertical-align: middle;
+	font-size: 4vmin;
 }
 
 main {
@@ -52,3 +53,5 @@ main * {
 .cell.col1, .cell.col2 { border-right-style: solid;  }
 .cell.row1, .cell.row2 { border-bottom-style: solid; }
 
+.cell.x:before {content:'\2718'; color: blue;} 
+.cell.o:before {content: '\25EF'; color: red; font-size: 130%; font-weight: bold;}
