@@ -1,57 +1,64 @@
-html, body, main {
+/* From http://www.stefanwienert.de/blog/2012/05/18/easy-css-vendor-prefix-mixin-for-sass/ */
+html, body {
   height: 100%;
-  width: 100%; }
+  width: 100%;
+  padding: 0;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none; }
 
+/* https://css-tricks.com/centering-in-the-unknown/ */
 body {
-  display: table;
-  vertical-align: middle;
-  font-size: 4vmin; }
-
-main {
-  position: relative;
-  vertical-align: middle;
-  display: table-cell; }
-
-main * {
-  box-sizing: border-box;
-  border-collapse: separate; }
-
-.metagrid {
-  width: 90vmin;
-  background: white;
-  margin: auto; }
-
-.grid, .cell {
   text-align: center;
+  font-size: 0; }
+
+body:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
   vertical-align: middle; }
 
-.grid {
-  padding: 0.5vmin; }
+main {
+  vertical-align: middle;
+  display: inline-block; }
 
-.metagrid > tbody > tr > td, .metagrid {
-  border: 0.5vmin outset grey;
-  border-collapse: separate; }
+/* styling the grid */
+.metagrid {
+  background: gray;
+  font-size: 4vmin;
+  border-collapse: separate;
+  border-spacing: 1.2vmin;
+  border: 1vmin outset gray; }
+
+.grid {
+  background: white; }
 
 .cell {
-  width: 10vmin;
-  overflow: hidden;
-  height: 10vmin;
-  border-width: 0.25vmin;
-  border-color: rgba(0, 0, 0, 0.15); }
+  text-align: center;
+  vertical-align: middle;
+  width: 9.5vmin;
+  height: 9.5vmin;
+  border: 0.31vmin solid #b3b3b3; }
 
-.cell.col1, .cell.col2 {
-  border-right-style: solid; }
+.cell.col1 {
+  border-left: 1.5vmin solid white; }
 
-.cell.row1, .cell.row2 {
-  border-bottom-style: solid; }
+.cell.col3 {
+  border-right: 1.5vmin solid white; }
 
-.cell.x:before {
-  content: '\2718';
-  color: blue; }
+.cell.row1 {
+  border-top: 1.5vmin solid white; }
 
-.cell.o:before {
-  content: '\25EF';
-  color: red;
+.cell.row3 {
+  border-bottom: 1.5vmin solid white; }
+
+.cell.x {
+  color: red; }
+
+.cell.o {
+  color: blue;
   font-size: 130%;
   font-weight: bold; }
 

@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="author" content="David Robertson" />
-		
+		<script type="text/javascript" src="script.js"></script>
 		<title>Metaox</title>
 		
 		<!-- Bootstrap core CSS -->
@@ -18,7 +18,6 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 	</head>
-	<!--TODO: Javascript for showing/hiding abstracts?-->
 	<body>
 		<main>
 			<table class="metagrid">
@@ -30,8 +29,7 @@
 							{% for k in range(1, 4) %}
 							<tr>
 								{% for l in range (1, 4) %}
-								<td class="cell row{{k}} col{{l}} {{'xoxo'[l]}}" id="cell{{i}}{{j}}{{k}}{{l}}">
-								</td>
+								<td class="cell row{{k}} col{{l}}" id="cell{{i}}{{j}}{{k}}{{l}}"></td>
 								{% endfor %}
 							</tr>
 							{% endfor %}
@@ -43,6 +41,4 @@
 			</table>
 		</main>
 	</body>
-  
-  <script async defer type="text/javascript" src="script.js" />
 </html>
