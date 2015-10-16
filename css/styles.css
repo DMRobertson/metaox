@@ -1,0 +1,30 @@
+.grid, .cell {
+  box-sizing: border-box;
+  border-collapse: separate;
+  text-align: center;
+  vertical-align: middle; }
+
+.metagrid, .grid {
+  width: 100%;
+  padding: 5px; }
+
+.metagrid > tbody > tr > td, .metagrid {
+  border: 4px outset grey; }
+
+.metagrid {
+  background: white; }
+
+.cell {
+  padding: 10px;
+  width: 33.3%;
+  background: white;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.15); }
+
+.cell.col1, .cell.col2 {
+  border-right-style: solid; }
+
+.cell.row1, .cell.row2 {
+  border-bottom-style: solid; }
+
+/*# sourceMappingURL=styles.css.map */
