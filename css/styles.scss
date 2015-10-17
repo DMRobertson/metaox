@@ -168,27 +168,12 @@ $o_color_bg:  lighten($o_color, 45);
 	padding: 0;
 }
 
-@mixin shadowed ($shadow_spec){
-	content: '';
-	display: block;
-	box-shadow: $shadow_spec;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-    height: 100%;
-}
-
 aside footer {
 	margin-top: 1vmin;
 	overflow-y: auto;
 	font-size: 1.2vw;
 	position: relative;
 	flex-grow: 1;
-}
-
-aside footer ul:before{
-	@include shadowed(inset 0 0 10px black);
 }
 
 aside #log li {

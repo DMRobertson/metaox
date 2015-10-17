@@ -188,16 +188,6 @@ aside footer {
   position: relative;
   flex-grow: 1; }
 
-aside footer ul:before {
-  content: '';
-  display: block;
-  box-shadow: inset 0 0 10px black;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; }
-
 aside #log li {
   padding: 0px 5px; }
 

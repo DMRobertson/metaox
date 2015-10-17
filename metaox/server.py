@@ -2,8 +2,9 @@ import asyncio
 import logging
 import websockets
 
-from .client import Client
-from .config import max_clients
+from .client   import Client
+from .config   import max_clients
+from .protocol import await_message
 
 class MetaOXServer:
 	def __init__(self, ip='localhost', port='8001'):
@@ -31,6 +32,9 @@ class MetaOXServer:
 	
 	@asyncio.coroutine
 	def new_client(self, socket, path):
+		if len(self.clients) >= max_clients:
+			return #discard connection TODO send an error message
+		
 		id = self.num_connections
 		self.num_connections += 1
 		c = Client(id, socket)
@@ -40,15 +44,27 @@ class MetaOXServer:
 		self.loop.create_task(self.broadcast_client_names())
 		
 		while True:
-			x = yield from socket.recv()
-			if x is None:
+			response = yield from await_message(socket)
+			if response is None:
 				break
+			type, data = response
+			
+			try:
+				handler = getattr(self, 'handle_' + type)
+			except AttributeError:
+				logging.error("Unable to handle {} message. Data: {}".format(
+				  type, data))
 			else:
-				... #handle x
+				yield from handler(c, data)
 		
 		#When connection is lost:
 		self.clients.remove(c)
 		self.loop.create_task(self.broadcast_client_names())
+	
+	@asyncio.coroutine
+	def handle_edit_name(self, client, data):
+		client.name = data['name']
+		yield from self.broadcast_client_names()
 	
 	@asyncio.coroutine
 	def broadcast_client_names(self):

@@ -13,10 +13,6 @@ var log = {
 	message:  function(message){ log.generic('',      message) },
 }
 
-var socket_connected = function(e){ log.info('WebSocket connection established.') }
-var socket_closed    = function(e){ log.info('WebSocket connection closed.')      }
-var socket_error     = function(e){ log.error('WebSocket error' + e.message)      }
-
 // game state
 
 var game = {
@@ -25,8 +21,11 @@ var game = {
 	handlers: {}
 }
 
-// io
+// websocket io
 
+var socket_connected = function(e){ log.info('WebSocket connection established.') }
+var socket_closed    = function(e){ log.info('WebSocket connection closed.')      }
+var socket_error     = function(e){ log.error('WebSocket error' + e.message)      }
 var socket_message = function(e){
 	data = JSON.parse(e.data)
 	log.debug(JSON.stringify(data))
@@ -43,16 +42,33 @@ var socket_message = function(e){
 
 game.handlers.client_names = function(data){
 	var clients = data['clients']
-	for (var i = 0; i < clients.length; i += 1){
-		game.elements.clients[i].innerText = clients[i] 
-		game.elements.clients[i].classList.remove('me')
+	for (var i = 0; i < game.elements.clients.length; i += 1){
+		var li = game.elements.clients[i]
+		if (i < clients.length){
+			li.innerText = clients[i]
+		} else {
+			li.innerText = ''
+		}
+		li.classList.remove('me')
+		li.contentEditable = false
 	}
-	for (; i < game.elements.clients.length; i += 1){
-		game.elements.clients[i].innerText = ''
-		game.elements.clients[i].classList.remove('me')
-	}
-	game.elements.clients[data['my_id']].classList.add('me')
+	
+	var myname = game.elements.clients[data['my_id']]
+	myname.classList.add('me')
+	myname.contentEditable = true
 	log.debug('Updated client list')
+}
+
+game.handlers.on_rename = function(e){
+	e.target.innerText = e.target.innerText.replace('\n', '')
+	game.socket.transmit('edit_name', {'name': e.target.innerText})
+}
+game.handlers.ignore_return = function(e){
+	//http://stackoverflow.com/questions/425274/prevent-line-paragraph-breaks-in-contenteditable
+	if (e.which === 13){
+		e.preventDefault();
+	}
+	e.srcElement.blur()
 }
 
 var apply_state = function(data){
@@ -101,14 +117,24 @@ var main = function(){
 	for (var i = 0; i < game.elements.cells.length; i++){
 		game.elements.cells[i].addEventListener("click", cell_handler, true)
 	}
-	game.elements.grids = document.querySelectorAll('.metagrid .grid')
-	game.elements.clients = document.querySelectorAll('#clients li')
 	
+	game.elements.grids = document.querySelectorAll('.metagrid .grid')
+	
+	game.elements.clients = document.querySelectorAll('#clients li')
+	for (var i = 0; i < game.elements.clients.length; i += 1){
+		game.elements.clients[i].addEventListener('input', game.handlers.on_rename)
+		game.elements.clients[i].addEventListener('keydown', game.handlers.ignore_return)
+	}
 	game.socket = new WebSocket('ws://' + window.location.hostname + ':8001')
 	game.socket.onopen    = socket_connected
 	game.socket.onclose   = socket_closed
 	game.socket.onerror   = socket_error
 	game.socket.onmessage = socket_message
+	game.socket.transmit  = function(type, obj){
+		obj['type'] = type
+		log.debug('-> ' + JSON.stringify(obj))
+		game.socket.send(JSON.stringify(obj))
+	}
 };
 
 document.addEventListener("DOMContentLoaded", main, false);
