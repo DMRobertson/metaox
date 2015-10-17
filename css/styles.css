@@ -30,7 +30,10 @@ aside {
   top: 0;
   right: 0;
   bottom: 0;
-  background: #f7f7f7; }
+  background: #f7f7f7;
+  height: 100%;
+  display: flex;
+  flex-flow: column; }
 
 /* Responsive sizes*/
 main {
@@ -165,5 +168,37 @@ aside {
   border-top-color: #fe3; }
 .active .cell.row3 {
   border-bottom-color: #fe3; }
+
+/* Clients */
+#clients {
+  flex-grow: 0; }
+
+/* The log */
+#log {
+  list-style-type: none;
+  padding: 0; }
+
+aside footer {
+  margin-top: 1vmin;
+  overflow-y: auto;
+  font-size: 1.5vmin;
+  position: relative;
+  flex-grow: 1; }
+
+aside footer ul:before {
+  content: '';
+  display: block;
+  box-shadow: inset 0 0 0.7vmin black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; }
+
+#log .info {
+  background: #e6e6ff; }
+
+#log .error {
+  background: #e6e6ff; }
 
 /*# sourceMappingURL=styles.css.map */

@@ -41,9 +41,11 @@
 			</table>
 		</main>
 		<aside>
-			<section id="clients">
-			
-			<section>
+			<ul id="clients">
+				{% for i in range(config['max_clients'])%}
+				<li id="client{{i}}"></li>
+				{% endfor %}
+			</ul>
 			<footer>
 				<ul id="log">
 				</ul>

@@ -44,6 +44,9 @@ aside {
 	right: 0;
 	bottom: 0;
 	background: darken($page_background, 3);
+	height: 100%;
+	display: flex;
+	flex-flow: column;
 }
 
 /* Responsive sizes*/
@@ -151,3 +154,40 @@ $o_color_bg:  lighten($o_color, 45);
 @include grid_and_color_cells(x, background, $x_color_bg, $x_color_bg);
 @include grid_and_color_cells(o, background, $o_color_bg, $o_color_bg);
 @include grid_and_color_cells(active, box-shadow, 0 0 5vmin $active_grid_color, $active_grid_color );
+
+/* Clients */
+#clients {
+	flex-grow: 0;
+}
+
+/* The log */
+#log {
+	list-style-type: none;
+	padding: 0;
+}
+
+@mixin shadowed ($shadow_spec){
+	content: '';
+	display: block;
+	box-shadow: $shadow_spec;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+    height: 100%;
+}
+
+aside footer {
+	margin-top: 1vmin;
+	overflow-y: auto;
+	font-size: 1.5vmin;
+	position: relative;
+	flex-grow: 1;
+}
+
+aside footer ul:before{
+	@include shadowed(inset 0 0 0.7vmin black);
+}
+
+#log .info { background: lighten(blue, 45) }
+#log .error { background: lighten(blue, 45) }
