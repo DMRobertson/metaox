@@ -1,12 +1,14 @@
+/* SASS variables and functions */
+
 $cell_color: white;
 $grid_color: gray;
 $active_grid_color: #fe3;
 
-$cell_size: 9.5vmin;
+$cell_size: 8.5vmin;
 $grid_padding: 1.5vmin;
 $grid_spacing: 1.2vmin;
 $meta_border: 1vmin;
-$line_width: 0.31vmin;
+$line_width: 0.35vmin;
 
 $x_color:  blue;
 $o_color:  red;
@@ -22,19 +24,20 @@ $o_color_bg:  lighten($o_color, 45);
   #{$name}: #{$argument};
 }
 
+/* Page setup, including the vertical centering tricks.
+https://css-tricks.com/centering-in-the-unknown/ */
+
 html, body {
 	height: 100%;
 	width: 100%;
 	padding: 0;
-	cursor: default;
-	@include vendor-prefix(user-select, none)
 }
-
-/* https://css-tricks.com/centering-in-the-unknown/ */
 
 body {
 	text-align: center;
 	font-size: 0;
+	cursor: default;
+	@include vendor-prefix(user-select, none)
 }
 
 body:before {
@@ -47,16 +50,17 @@ body:before {
 main {
 	vertical-align: middle;
 	display: inline-block;
+	font-size: 4vmin;
 }
 
-/* styling the grid */
+/* The grid */
 
 .metagrid {
 	background: gray;
-	font-size: 4vmin;
 	border-collapse: separate;
 	border-spacing: $grid_spacing;
 	border: $meta_border outset $grid_color;
+	text-align: left;
 }
 
 .grid {
@@ -102,3 +106,22 @@ main {
 .cell.x:before { content: '\2717'; }
 .cell.o {color: $o_color; font-size: 130%; font-weight: bold;}
 .cell.o:before { content: '\25EF'; }
+
+/* The log */
+
+footer {
+	height: 8vmin;
+	margin-top: 1vmin;
+	overflow-y: scroll;
+	box-shadow: 0 0 1vmin black;
+	font-size: 2vmin;
+	text-align: left;
+}
+
+#log {
+	list-style-type: none;
+	padding: 0;
+}
+
+#log .info { background: lighten(blue, 45) }
+#log .error { background: lighten(blue, 45) }

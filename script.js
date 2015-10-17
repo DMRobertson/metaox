@@ -1,8 +1,22 @@
+var log = {
+	generic: function(type, message){
+		var entry = document.createElement('li')
+		entry.className = type
+		entry.innerText = message
+		game.log.appendChild(entry)
+	},
+	error:    function(message){ log.generic('error', message) },
+	info:     function(message){ log.generic('info',  message) },
+	message:  function(message){ log.generic('',      message) },
+}
+
 var game = {
 	cell_state_names: ["empty", "o", "x"],
 };
 
 var main = function(){
+	game.log = document.getElementById('log')
+	
 	game.cells = document.querySelectorAll('.cell')
 	for (var i = 0; i < game.cells.length; i++){
 		game.cells[i].addEventListener("click", cell_handler, true)
@@ -17,26 +31,26 @@ var main = function(){
 };
 
 var socket_connected = function(e){
-	console.log('WebSocket connection established.')
+	log.info('WebSocket connection established.')
 }
 
 var socket_closed = function(e){
-	console.log('WebSocket connection closed.')
+	log.info('WebSocket connection closed.')
 }
 
-var socket_error = function(e){
-	console.error('WebSocket error', e)
+var socket_error = function(e){ 
+	log.error('WebSocket error' + e.message)
 }
 
 var socket_message = function(e){
-	console.log('WebSocket message', e)
 	data = JSON.parse(e.data)
 	switch (data['type']){
 		case 'state':
+			log.info('Received update from server')
 			apply_state(data)
 			break;
 		default:
-			throw new Error("Unknown message type: " + data['type'])
+			log.error("Unknown message type: " + data['type'])
 	}
 }
 

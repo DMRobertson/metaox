@@ -1,2 +1,2 @@
-from .server import launch_server
-'''launch with python -c "import metaox; metaox.launch_server()"'''
+from .server import MetaOXServer
+'''launch with python -m metaox.server'''

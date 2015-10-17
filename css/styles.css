@@ -1,19 +1,21 @@
+/* SASS variables and functions */
 /* From http://www.stefanwienert.de/blog/2012/05/18/easy-css-vendor-prefix-mixin-for-sass/ */
+/* Page setup, including the vertical centering tricks.
+https://css-tricks.com/centering-in-the-unknown/ */
 html, body {
   height: 100%;
   width: 100%;
-  padding: 0;
+  padding: 0; }
+
+body {
+  text-align: center;
+  font-size: 0;
   cursor: default;
   -webkit-user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -o-user-select: none;
   user-select: none; }
-
-/* https://css-tricks.com/centering-in-the-unknown/ */
-body {
-  text-align: center;
-  font-size: 0; }
 
 body:before {
   content: '';
@@ -23,15 +25,16 @@ body:before {
 
 main {
   vertical-align: middle;
-  display: inline-block; }
+  display: inline-block;
+  font-size: 4vmin; }
 
-/* styling the grid */
+/* The grid */
 .metagrid {
   background: gray;
-  font-size: 4vmin;
   border-collapse: separate;
   border-spacing: 1.2vmin;
-  border: 1vmin outset gray; }
+  border: 1vmin outset gray;
+  text-align: left; }
 
 .grid {
   background: white; }
@@ -48,9 +51,9 @@ main {
 .cell {
   text-align: center;
   vertical-align: middle;
-  width: 9.5vmin;
-  height: 9.5vmin;
-  border: 0.31vmin solid #b3b3b3; }
+  width: 8.5vmin;
+  height: 8.5vmin;
+  border: 0.35vmin solid #b3b3b3; }
 
 .cell.col1 {
   border-left: 1.5vmin solid white; }
@@ -113,5 +116,24 @@ main {
 
 .cell.o:before {
   content: '\25EF'; }
+
+/* The log */
+footer {
+  height: 8vmin;
+  margin-top: 1vmin;
+  overflow-y: scroll;
+  box-shadow: 0 0 1vmin black;
+  font-size: 2vmin;
+  text-align: left; }
+
+#log {
+  list-style-type: none;
+  padding: 0; }
+
+#log .info {
+  background: #e6e6ff; }
+
+#log .error {
+  background: #e6e6ff; }
 
 /*# sourceMappingURL=styles.css.map */
