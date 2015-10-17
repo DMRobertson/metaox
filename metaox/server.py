@@ -1,54 +1,61 @@
 import asyncio
+import logging
 import websockets
 
-from .state import encode_message, reset_state
+from .client import Client
+from .config import max_clients
 
 class MetaOXServer:
 	def __init__(self, ip='localhost', port='8001'):
 		self.ip = ip
 		self.port = port
-		self.connection_queue = asyncio.Queue()
+		self.clients = []
 		self.num_connections = 0
-		
-		self.games = {}
-		self.num_games = 0
+		self.loop = None
 	
 	def launch(self):
-		loop = asyncio.get_event_loop()
-		start_server = websockets.serve(self.connection_established, self.ip, self.port)
+		self.loop = asyncio.get_event_loop()
+		start_server = websockets.serve(self.new_client, self.ip, self.port)
+		server = self.loop.run_until_complete(start_server)
+		logging.info('Looking for connections on {}:{}'.format(
+		  self.ip, self.port))
+		print("Press Control-C to stop the server.")
 		try:
-			ws_server = loop.create_task(start_server)
-			loop.create_task(self.matchmaker())
-			print('Looking for connections on {}:{}'.format(
-			  self.ip, self.port))
-			print("Press Control-C to stop the server.")
-			loop.run_until_complete(do_nothing())
-			
+			self.loop.run_until_complete(do_nothing())
 		except KeyboardInterrupt:
-			print("KeyboardInterrupt received: closing the server.")
+			logging.info("KeyboardInterrupt received: closing the server.")
+		finally:
+			server.close()
+			self.loop.run_until_complete(server.wait_closed())
+			self.loop.close()
 	
 	@asyncio.coroutine
-	def connection_established(self, socket, path):
+	def new_client(self, socket, path):
 		id = self.num_connections
 		self.num_connections += 1
-		print("Connection #{} from {} to {}".format(
-		  id, format_socket(socket), path))
-		yield from self.connection_queue.put((socket, path))
+		c = Client(id, socket)
+		logging.info("New client {}".format(c))
+		
+		self.clients.append(c)
+		self.loop.create_task(self.broadcast_client_names())
+		
+		while True:
+			x = yield from socket.recv()
+			if x is None:
+				break
+			else:
+				... #handle x
+		
+		#When connection is lost:
+		self.clients.remove(c)
+		self.loop.create_task(self.broadcast_client_names())
 	
 	@asyncio.coroutine
-	def matchmaker(self):
-		while True:
-			socket1, path1 = yield from self.connection_queue.get()
-			assert path1 == '/'
-			socket2, path2 = yield from self.connection_queue.get()
-			assert path2 == '/'
-			#todo: decide how to handle paths
-			game = Game(self.num_games, socket1, socket2)
-			self.games[self.num_games] = game
-			self.num_games += 1
-
-def format_socket(socket):
-	return '{}:{}'.format(socket.host, socket.port)
+	def broadcast_client_names(self):
+		data = {'clients': [c.name for c in self.clients] }
+		for i, c in enumerate(self.clients):
+			data['my_id'] = i
+			yield from c.send_message('client_names', data)
 
 def do_nothing(seconds=1):
 	"""Signals like the KeyboardInterrupt are not supported on windows. This workaround forces the event loop to 'check' for keyboard interrupts once a second. See http://bugs.python.org/issue23057"""

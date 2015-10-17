@@ -160,6 +160,8 @@ $o_color_bg:  lighten($o_color, 45);
 	flex-grow: 0;
 }
 
+#clients .me { font-weight: bold; }
+
 /* The log */
 #log {
 	list-style-type: none;
@@ -180,14 +182,19 @@ $o_color_bg:  lighten($o_color, 45);
 aside footer {
 	margin-top: 1vmin;
 	overflow-y: auto;
-	font-size: 1.5vmin;
+	font-size: 1.2vw;
 	position: relative;
 	flex-grow: 1;
 }
 
 aside footer ul:before{
-	@include shadowed(inset 0 0 0.7vmin black);
+	@include shadowed(inset 0 0 10px black);
 }
 
-#log .info { background: lighten(blue, 45) }
-#log .error { background: lighten(blue, 45) }
+aside #log li {
+	padding: 0px 5px;
+}
+
+#log .info  { background: lighten(blue, 45) }
+#log .error { background: lighten(red, 45) }
+#log .debug { color: #444; }

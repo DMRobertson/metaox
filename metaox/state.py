@@ -10,7 +10,3 @@ def reset_state():
 	}
 	return state
 
-def encode_message(type, payload):
-	data = dict(payload)
-	data['type'] = type
-	return json.dumps(data)
