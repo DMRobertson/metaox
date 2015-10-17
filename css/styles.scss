@@ -8,6 +8,11 @@ $grid_spacing: 1.2vmin;
 $meta_border: 1vmin;
 $line_width: 0.31vmin;
 
+$x_color:  blue;
+$o_color:  red;
+$x_color_bg:  lighten($x_color, 45);
+$o_color_bg:  lighten($o_color, 45);
+
 /* From http://www.stefanwienert.de/blog/2012/05/18/easy-css-vendor-prefix-mixin-for-sass/ */
 @mixin vendor-prefix($name, $argument) {
   -webkit-#{$name}: #{$argument};
@@ -21,6 +26,7 @@ html, body {
 	height: 100%;
 	width: 100%;
 	padding: 0;
+	cursor: default;
 	@include vendor-prefix(user-select, none)
 }
 
@@ -58,9 +64,11 @@ main {
 }
 
 .grid.active {
-	background: $active_grid_color;
 	box-shadow: 0 0 5vmin $active_grid_color;
 }
+
+.grid.x { background: $x_color_bg; }
+.grid.o { background: $o_color_bg;  }
 
 .cell {
 	text-align: center;
@@ -75,10 +83,22 @@ main {
 .cell.row1 { border-top:    $grid_padding solid $cell_color; }
 .cell.row3 { border-bottom: $grid_padding solid $cell_color; }
 
+.x .cell.col1 { border-left-color:   $x_color_bg; }
+.x .cell.col3 { border-right-color:  $x_color_bg; }
+.x .cell.row1 { border-top-color:    $x_color_bg; }
+.x .cell.row3 { border-bottom-color: $x_color_bg; }
+
+.o .cell.col1 { border-left-color:   $o_color_bg; }
+.o .cell.col3 { border-right-color:  $o_color_bg; }
+.o .cell.row1 { border-top-color:    $o_color_bg; }
+.o .cell.row3 { border-bottom-color: $o_color_bg; }
+
 .active .cell.col1 { border-left-color:   $active_grid_color; }
 .active .cell.col3 { border-right-color:  $active_grid_color; }
 .active .cell.row1 { border-top-color:    $active_grid_color; }
 .active .cell.row3 { border-bottom-color: $active_grid_color; }
 
-.cell.x {color: red; } 
-.cell.o {color: blue; font-size: 130%; font-weight: bold;}
+.cell.x {color: $x_color; } 
+.cell.x:before { content: '\2717'; }
+.cell.o {color: $o_color; font-size: 130%; font-weight: bold;}
+.cell.o:before { content: '\25EF'; }

@@ -3,6 +3,7 @@ html, body {
   height: 100%;
   width: 100%;
   padding: 0;
+  cursor: default;
   -webkit-user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
@@ -36,8 +37,13 @@ main {
   background: white; }
 
 .grid.active {
-  background: #fe3;
   box-shadow: 0 0 5vmin #fe3; }
+
+.grid.x {
+  background: #e6e6ff; }
+
+.grid.o {
+  background: #ffe6e6; }
 
 .cell {
   text-align: center;
@@ -58,6 +64,30 @@ main {
 .cell.row3 {
   border-bottom: 1.5vmin solid white; }
 
+.x .cell.col1 {
+  border-left-color: #e6e6ff; }
+
+.x .cell.col3 {
+  border-right-color: #e6e6ff; }
+
+.x .cell.row1 {
+  border-top-color: #e6e6ff; }
+
+.x .cell.row3 {
+  border-bottom-color: #e6e6ff; }
+
+.o .cell.col1 {
+  border-left-color: #ffe6e6; }
+
+.o .cell.col3 {
+  border-right-color: #ffe6e6; }
+
+.o .cell.row1 {
+  border-top-color: #ffe6e6; }
+
+.o .cell.row3 {
+  border-bottom-color: #ffe6e6; }
+
 .active .cell.col1 {
   border-left-color: #fe3; }
 
@@ -71,11 +101,17 @@ main {
   border-bottom-color: #fe3; }
 
 .cell.x {
-  color: red; }
+  color: blue; }
+
+.cell.x:before {
+  content: '\2717'; }
 
 .cell.o {
-  color: blue;
+  color: red;
   font-size: 130%;
   font-weight: bold; }
+
+.cell.o:before {
+  content: '\25EF'; }
 
 /*# sourceMappingURL=styles.css.map */
