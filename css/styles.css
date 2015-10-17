@@ -1,108 +1,121 @@
-/* SASS variables and functions */
-/* From http://www.stefanwienert.de/blog/2012/05/18/easy-css-vendor-prefix-mixin-for-sass/ */
-/* Page setup, including the vertical centering tricks.
-https://css-tricks.com/centering-in-the-unknown/ */
+/* The high-level layout. We use two fixed elements, one to house the grid and another to house the chat log. */
 html, body {
   height: 100%;
   width: 100%;
-  padding: 0; }
-
-body {
-  text-align: center;
-  font-size: 0;
+  padding: 0;
   cursor: default;
   -webkit-user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -o-user-select: none;
-  user-select: none; }
+  user-select: none;
+  background: #fff; }
 
-body:before {
+main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  /* Trick to vertically align the metagrid */
+  text-align: center; }
+
+main:before {
   content: '';
   display: inline-block;
   height: 100%;
   vertical-align: middle; }
 
+aside {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #f7f7f7; }
+
+/* Responsive sizes*/
 main {
-  vertical-align: middle;
-  display: inline-block;
-  font-size: 4vmin; }
+  width: 75vw; }
+
+aside {
+  width: 25vw; }
+
+#metagrid {
+  border-spacing: 1vmin;
+  border-width: 1vmin; }
+
+.cell {
+  width: 7vmin;
+  height: 7vmin;
+  border-width: 0.34vmin; }
+
+.cell.col1 {
+  border-left-width: 1.5vmin; }
+
+.cell.col3 {
+  border-right-width: 1.5vmin; }
+
+.cell.row1 {
+  border-top-width: 1.5vmin; }
+
+.cell.row3 {
+  border-bottom-width: 1.5vmin; }
+
+/* fullscreen sizes */
+.fullscreen main {
+  width: 100vw; }
+.fullscreen aside {
+  width: 0; }
+.fullscreen #metagrid {
+  border-spacing: 1.33333vmin;
+  border-width: 1.33333vmin; }
+.fullscreen .cell {
+  width: 9.33333vmin;
+  height: 9.33333vmin;
+  border-width: 0.45333vmin; }
+.fullscreen .cell.col1 {
+  border-left-width: 2vmin; }
+.fullscreen .cell.col3 {
+  border-right-width: 2vmin; }
+.fullscreen .cell.row1 {
+  border-top-width: 2vmin; }
+.fullscreen .cell.row3 {
+  border-bottom-width: 2vmin; }
 
 /* The grid */
-.metagrid {
-  background: gray;
+#metagrid {
+  /* Trick to vertically align the metagrid */
+  display: inline-block;
+  vertical-align: middle;
+  background: #888;
   border-collapse: separate;
-  border-spacing: 1.2vmin;
-  border: 1vmin outset gray;
-  text-align: left; }
+  border-style: outset;
+  border-color: #9c9c9c;
+  font-size: 4vmin; }
 
 .grid {
-  background: white; }
-
-.grid.active {
-  box-shadow: 0 0 5vmin #fe3; }
-
-.grid.x {
-  background: #e6e6ff; }
-
-.grid.o {
-  background: #ffe6e6; }
+  background: #fff; }
 
 .cell {
   text-align: center;
   vertical-align: middle;
-  width: 8.5vmin;
-  height: 8.5vmin;
-  border: 0.35vmin solid #b3b3b3; }
+  border-style: solid;
+  border-color: #b3b3b3;
+  /* fixes problem with the O being to big */
+  line-height: 0; }
 
 .cell.col1 {
-  border-left: 1.5vmin solid white; }
+  border-left-color: #fff; }
 
 .cell.col3 {
-  border-right: 1.5vmin solid white; }
+  border-right-color: #fff; }
 
 .cell.row1 {
-  border-top: 1.5vmin solid white; }
+  border-top-color: #fff; }
 
 .cell.row3 {
-  border-bottom: 1.5vmin solid white; }
+  border-bottom-color: #fff; }
 
-.x .cell.col1 {
-  border-left-color: #e6e6ff; }
-
-.x .cell.col3 {
-  border-right-color: #e6e6ff; }
-
-.x .cell.row1 {
-  border-top-color: #e6e6ff; }
-
-.x .cell.row3 {
-  border-bottom-color: #e6e6ff; }
-
-.o .cell.col1 {
-  border-left-color: #ffe6e6; }
-
-.o .cell.col3 {
-  border-right-color: #ffe6e6; }
-
-.o .cell.row1 {
-  border-top-color: #ffe6e6; }
-
-.o .cell.row3 {
-  border-bottom-color: #ffe6e6; }
-
-.active .cell.col1 {
-  border-left-color: #fe3; }
-
-.active .cell.col3 {
-  border-right-color: #fe3; }
-
-.active .cell.row1 {
-  border-top-color: #fe3; }
-
-.active .cell.row3 {
-  border-bottom-color: #fe3; }
-
+/*  Styles for showing game state */
 .cell.x {
   color: blue; }
 
@@ -117,23 +130,40 @@ main {
 .cell.o:before {
   content: '\25EF'; }
 
-/* The log */
-footer {
-  height: 8vmin;
-  margin-top: 1vmin;
-  overflow-y: scroll;
-  box-shadow: 0 0 1vmin black;
-  font-size: 2vmin;
-  text-align: left; }
-
-#log {
-  list-style-type: none;
-  padding: 0; }
-
-#log .info {
+.grid.x {
   background: #e6e6ff; }
 
-#log .error {
-  background: #e6e6ff; }
+.x .cell.col1 {
+  border-left-color: #e6e6ff; }
+.x .cell.col3 {
+  border-right-color: #e6e6ff; }
+.x .cell.row1 {
+  border-top-color: #e6e6ff; }
+.x .cell.row3 {
+  border-bottom-color: #e6e6ff; }
+
+.grid.o {
+  background: #ffe6e6; }
+
+.o .cell.col1 {
+  border-left-color: #ffe6e6; }
+.o .cell.col3 {
+  border-right-color: #ffe6e6; }
+.o .cell.row1 {
+  border-top-color: #ffe6e6; }
+.o .cell.row3 {
+  border-bottom-color: #ffe6e6; }
+
+.grid.active {
+  box-shadow: 0 0 5vmin #fe3; }
+
+.active .cell.col1 {
+  border-left-color: #fe3; }
+.active .cell.col3 {
+  border-right-color: #fe3; }
+.active .cell.row1 {
+  border-top-color: #fe3; }
+.active .cell.row3 {
+  border-bottom-color: #fe3; }
 
 /*# sourceMappingURL=styles.css.map */

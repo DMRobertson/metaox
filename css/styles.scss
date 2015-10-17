@@ -1,21 +1,4 @@
-/* SASS variables and functions */
-
-$cell_color: white;
-$grid_color: gray;
-$active_grid_color: #fe3;
-
-$cell_size: 8.5vmin;
-$grid_padding: 1.5vmin;
-$grid_spacing: 1.2vmin;
-$meta_border: 1vmin;
-$line_width: 0.35vmin;
-
-$x_color:  blue;
-$o_color:  red;
-$x_color_bg:  lighten($x_color, 45);
-$o_color_bg:  lighten($o_color, 45);
-
-/* From http://www.stefanwienert.de/blog/2012/05/18/easy-css-vendor-prefix-mixin-for-sass/ */
+// From http://www.stefanwienert.de/blog/2012/05/18/easy-css-vendor-prefix-mixin-for-sass/ */
 @mixin vendor-prefix($name, $argument) {
   -webkit-#{$name}: #{$argument};
   -ms-#{$name}: #{$argument};
@@ -24,104 +7,147 @@ $o_color_bg:  lighten($o_color, 45);
   #{$name}: #{$argument};
 }
 
-/* Page setup, including the vertical centering tricks.
-https://css-tricks.com/centering-in-the-unknown/ */
+// Colours 
+$page_background: #fff;
+$cell_color: #fff;
+$grid_color: #888;
 
+/* The high-level layout. We use two fixed elements, one to house the grid and another to house the chat log. */
 html, body {
 	height: 100%;
 	width: 100%;
 	padding: 0;
-}
-
-body {
-	text-align: center;
-	font-size: 0;
 	cursor: default;
-	@include vendor-prefix(user-select, none)
-}
-
-body:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
+	@include vendor-prefix(user-select, none);
+	background: $page_background;
 }
 
 main {
-	vertical-align: middle;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	/* Trick to vertically align the metagrid */
+	text-align: center
+} 
+
+main:before {
+	content: '';
 	display: inline-block;
-	font-size: 4vmin;
+	height: 100%;
+	vertical-align: middle;
+}
+
+aside {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background: darken($page_background, 3);
+}
+
+/* Responsive sizes*/
+$main_width: 75vw;
+$cell_size: 7vmin;
+$grid_line_width: 0.34vmin;
+$metagrid_border_width: 1vmin;
+$subgrid_padding: 1.5vmin;
+$metagrid_spacing: 1vmin;
+
+@if( 9 * $cell_size + 2 * $metagrid_border_width + 4 * $metagrid_spacing + 3 * $subgrid_padding >= 75vmin) {
+	@error "Not enough space for grid";
+}
+
+main { width: $main_width; }
+aside { width: 100vw - $main_width; }
+#metagrid {
+	border-spacing: $metagrid_spacing;
+	border-width: $metagrid_border_width;
+}
+.cell  { 
+	width: $cell_size;
+	height: $cell_size;
+	border-width: $grid_line_width;
+}
+.cell.col1 { border-left-width:   $subgrid_padding; }
+.cell.col3 { border-right-width:  $subgrid_padding; }
+.cell.row1 { border-top-width:    $subgrid_padding; }
+.cell.row3 { border-bottom-width: $subgrid_padding; }
+
+/* fullscreen sizes */
+$fullscreen_scale: 100vw/$main_width;
+.fullscreen {
+	main { width: 100vw; }
+	aside { width: 0; }
+	#metagrid {
+		border-spacing: $fullscreen_scale * $metagrid_spacing;
+		border-width: $fullscreen_scale * $metagrid_border_width;
+	}
+	.cell  {
+		width: $fullscreen_scale * $cell_size;
+		height: $fullscreen_scale * $cell_size;
+		border-width: $fullscreen_scale * $grid_line_width;
+	}
+	.cell.col1 { border-left-width:   $fullscreen_scale * $subgrid_padding; }
+	.cell.col3 { border-right-width:  $fullscreen_scale * $subgrid_padding; }
+	.cell.row1 { border-top-width:    $fullscreen_scale * $subgrid_padding; }
+	.cell.row3 { border-bottom-width: $fullscreen_scale * $subgrid_padding; }
 }
 
 /* The grid */
 
-.metagrid {
-	background: gray;
+#metagrid {
+	/* Trick to vertically align the metagrid */
+	display: inline-block;
+	vertical-align: middle;
+	background: $grid_color;
 	border-collapse: separate;
-	border-spacing: $grid_spacing;
-	border: $meta_border outset $grid_color;
-	text-align: left;
+	border-style: outset;
+	border-color: lighten($grid_color, 8);
+	font-size: 4vmin;
 }
 
 .grid {
 	background: $cell_color;
 }
 
-.grid.active {
-	box-shadow: 0 0 5vmin $active_grid_color;
-}
-
-.grid.x { background: $x_color_bg; }
-.grid.o { background: $o_color_bg;  }
-
 .cell {
 	text-align: center;
 	vertical-align: middle;
-	width:  $cell_size;
-	height: $cell_size;
-	border: $line_width solid darken($cell_color, 30);
+	border-style: solid;
+	border-color: darken($cell_color, 30);
+	/* fixes problem with the O being to big */
+	line-height: 0;
 }
 
-.cell.col1 { border-left:   $grid_padding solid $cell_color; }
-.cell.col3 { border-right:  $grid_padding solid $cell_color; }
-.cell.row1 { border-top:    $grid_padding solid $cell_color; }
-.cell.row3 { border-bottom: $grid_padding solid $cell_color; }
+.cell.col1 { border-left-color:   $cell_color; }
+.cell.col3 { border-right-color:  $cell_color; }
+.cell.row1 { border-top-color:    $cell_color; }
+.cell.row3 { border-bottom-color: $cell_color; }
 
-.x .cell.col1 { border-left-color:   $x_color_bg; }
-.x .cell.col3 { border-right-color:  $x_color_bg; }
-.x .cell.row1 { border-top-color:    $x_color_bg; }
-.x .cell.row3 { border-bottom-color: $x_color_bg; }
-
-.o .cell.col1 { border-left-color:   $o_color_bg; }
-.o .cell.col3 { border-right-color:  $o_color_bg; }
-.o .cell.row1 { border-top-color:    $o_color_bg; }
-.o .cell.row3 { border-bottom-color: $o_color_bg; }
-
-.active .cell.col1 { border-left-color:   $active_grid_color; }
-.active .cell.col3 { border-right-color:  $active_grid_color; }
-.active .cell.row1 { border-top-color:    $active_grid_color; }
-.active .cell.row3 { border-bottom-color: $active_grid_color; }
+/*  Styles for showing game state */
+$x_color:  blue;
+$o_color:  red;
 
 .cell.x {color: $x_color; } 
 .cell.x:before { content: '\2717'; }
 .cell.o {color: $o_color; font-size: 130%; font-weight: bold;}
 .cell.o:before { content: '\25EF'; }
 
-/* The log */
+$active_grid_color: #fe3;
+$x_color_bg:  lighten($x_color, 45);
+$o_color_bg:  lighten($o_color, 45);
 
-footer {
-	height: 8vmin;
-	margin-top: 1vmin;
-	overflow-y: scroll;
-	box-shadow: 0 0 1vmin black;
-	font-size: 2vmin;
-	text-align: left;
+@mixin grid_and_color_cells($class, $key, $value, $color){
+	.grid.#{$class} { #{$key}: $value; }
+	.#{$class} {
+		.cell.col1 { border-left-color:   $color; }
+		.cell.col3 { border-right-color:  $color; }
+		.cell.row1 { border-top-color:    $color; }
+		.cell.row3 { border-bottom-color: $color; }
+	}
 }
 
-#log {
-	list-style-type: none;
-	padding: 0;
-}
-
-#log .info { background: lighten(blue, 45) }
-#log .error { background: lighten(blue, 45) }
+@include grid_and_color_cells(x, background, $x_color_bg, $x_color_bg);
+@include grid_and_color_cells(o, background, $o_color_bg, $o_color_bg);
+@include grid_and_color_cells(active, box-shadow, 0 0 5vmin $active_grid_color, $active_grid_color );

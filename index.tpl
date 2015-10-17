@@ -20,7 +20,7 @@
 	</head>
 	<body>
 		<main>
-			<table class="metagrid">
+			<table id="metagrid">
 				{% for i in range(1, 4) %}
 				<tr>
 					{% for j in range(1, 4) %}
@@ -39,10 +39,15 @@
 				</tr>
 				{% endfor %}
 			</table>
+		</main>
+		<aside>
+			<section id="clients">
+			
+			<section>
 			<footer>
 				<ul id="log">
 				</ul>
 			</footer>
-		</main>
+		</aside>
 	</body>
 </html>
