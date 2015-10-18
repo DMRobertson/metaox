@@ -132,10 +132,11 @@ $fullscreen_scale: 100vw/$main_width;
 $x_color:  blue;
 $o_color:  red;
 
-.cell.x {color: $x_color; } 
-.cell.x:before { content: '\2717'; }
-.cell.o {color: $o_color; font-size: 130%; font-weight: bold;}
-.cell.o:before { content: '\25EF'; }
+.x {color: $x_color; } 
+.o {color: $o_color; }
+.x:before, .o:before { display: inline-block; }
+.x:before{ content: '\2717';  }
+.o:before { content: '\25EF'; font-size: 130%; font-weight: bold; vertical-align: middle; }
 
 $active_grid_color: #fe3;
 $x_color_bg:  lighten($x_color, 45);
@@ -171,6 +172,15 @@ $o_color_bg:  lighten($o_color, 45);
 #clients .me { font-weight: bold; }
 #clients .unused { display: none; }
 
+#clients .x input, #clients .o input {
+	width: 90%;
+}
+#clients .x:before, #clients .o:before {
+	width: 10%;
+	display: inline-block;
+	text-align: center;
+}
+
 /* The log */
 #log {
 	list-style-type: none;
@@ -185,8 +195,3 @@ $o_color_bg:  lighten($o_color, 45);
 #log .info  { background: lighten(blue, 45) }
 #log .error { background: lighten(red, 45) }
 #log .debug { color: #999; }
-
-/* */
-#chat {
-
-}

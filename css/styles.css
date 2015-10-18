@@ -119,19 +119,24 @@ aside {
   border-bottom-color: #fff; }
 
 /*  Styles for showing game state */
-.cell.x {
+.x {
   color: blue; }
 
-.cell.x:before {
+.o {
+  color: red; }
+
+.x:before, .o:before {
+  display: inline-block;
+  /* vertical-align: middle; */
+  }
+
+.x:before {
   content: '\2717'; }
 
-.cell.o {
-  color: red;
+.o:before {
+  content: '\25EF';
   font-size: 130%;
   font-weight: bold; }
-
-.cell.o:before {
-  content: '\25EF'; }
 
 .grid.x {
   background: #e6e6ff; }
@@ -186,6 +191,15 @@ aside {
 #clients .unused {
   display: none; }
 
+#clients .x input, #clients .o input {
+  width: 90%; }
+
+#clients .x:before, #clients .o:before {
+  width: 10%;
+  display: inline-block;
+  text-align: center;
+  }
+
 /* The log */
 #log {
   list-style-type: none;
@@ -204,7 +218,5 @@ aside {
 
 #log .debug {
   color: #999; }
-
-/* */
 
 /*# sourceMappingURL=styles.css.map */

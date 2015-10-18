@@ -57,14 +57,17 @@ game.handlers.chat = function(message){
 
 game.handlers.client_names = function(clients){
 	for (var i = 0; i < ui.elements.clients.length; i += 1){
-		var li = ui.elements.clients[i]
+		var input = ui.elements.clients[i]
+		var li = input.parentElement
 		if (i < clients.length){
-			var pos = li.selectionStart
-			li.value = clients[i]
-			li.selectionStart = li.selectionEnd = pos
+			var pos = input.selectionStart
+			input.value = clients[i]
+			input.selectionStart = li.selectionEnd = pos
 			li.classList.remove('unused')
 		} else {
 			li.classList.add('unused')
+			li.classList.remove('x')
+			li.classList.remove('o')
 		}
 	}
 	log.debug('Updated client list')
@@ -72,12 +75,13 @@ game.handlers.client_names = function(clients){
 
 game.handlers.my_id = function(id){
 	for (var i = 0; i < ui.elements.clients.length; i += 1){ 
-		var li = ui.elements.clients[i]
+		var input = ui.elements.clients[i]
+		var li = input.parentElement
 		li.classList.remove('me')
-		li.disabled = true
+		input.disabled = true
 	}
 	var me = ui.elements.clients[id]
-	me.classList.add('me')
+	me.parentElement.classList.add('me')
 	me.disabled = false
 }
 
