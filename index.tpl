@@ -46,10 +46,8 @@
 				<li><input type="text" id="client{{i}}" /></li>
 				{% endfor %}
 			</ul>
-			<footer>
-				<ul id="log">
-				</ul>
-			</footer>
+			<ul id="log">
+			</ul>
 			<input type="text" id="chat" />
 		</aside>
 	</body>

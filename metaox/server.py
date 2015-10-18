@@ -60,8 +60,7 @@ class MetaOXServer:
 				handler = getattr(self, 'handle_' + command)
 			except AttributeError:
 				logging.error("No handler for {} command from {}. Arg: {}".format(
-				  command, c))
-				raise
+				  command, c, arg))
 			else:
 				yield from handler(c, arg)
 		
@@ -81,10 +80,15 @@ class MetaOXServer:
 		data = {'client_names': [c.name for c in self.clients] }
 		for i, c in enumerate(self.clients):
 			if c is except_for:
-				print('no')
 				continue
 			data['my_id'] = i
-			yield from c.transmit_state(data)
+			self.add_task(c.transmit_state(data))
+	
+	@asyncio.coroutine
+	def handle_say(self, client, arg):
+		data = {'chat': '{}: {}'.format(client.name, arg) }
+		for c in self.clients:
+			self.add_task(c.transmit_state(data))
 
 def do_nothing(seconds=1):
 	"""Signals like the KeyboardInterrupt are not supported on windows. This workaround forces the event loop to 'check' for keyboard interrupts once a second. See http://bugs.python.org/issue23057"""

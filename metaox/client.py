@@ -7,7 +7,7 @@ class Client:
 	def __init__(self, id, socket):
 		self.id = id
 		self.socket = socket
-		self.name = "client {}".format(id)
+		self.name = "client {} ({})".format(id, self.socket.host)
 	
 	def __str__(self):
 		return 'Client #{} ({}) at {}:{}'.format(

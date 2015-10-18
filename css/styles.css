@@ -40,7 +40,7 @@ main {
   width: 75vw; }
 
 aside {
-  width: 25vw; }
+  width: 24vw; }
 
 #metagrid {
   border-spacing: 1vmin;
@@ -189,16 +189,11 @@ aside {
 /* The log */
 #log {
   list-style-type: none;
-  padding: 0; }
-
-aside footer {
+  padding: 0;
+  flex-grow: 1;
   margin-top: 4px;
   overflow-y: auto;
   font-size: 1.2vw;
-  position: relative;
-  flex-grow: 1; }
-
-aside #log li {
   padding: 0px 5px; }
 
 #log .info {

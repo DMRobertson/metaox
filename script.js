@@ -19,7 +19,9 @@ var log = {
 		var entry = document.createElement('li')
 		entry.className = type
 		entry.innerText = message
-		ui.elements.log.appendChild(entry)
+		var log = ui.elements.log
+		log.appendChild(entry)
+		log.scrollTop = log.clientHeight
 	},
 	debug:    function(message){ log.generic('debug', message) },
 	error:    function(message){ log.generic('error', message) },
@@ -38,12 +40,20 @@ var socket_message = function(e){
 	for (var key in data){
 		if (data.hasOwnProperty(key)){
 			handler = game.handlers[key]
-			handler(data[key])
+			if (handler === undefined){
+				log.error('No handler for ' + key + ': ' + JSON.stringify(data[key]))
+			} else {
+				handler(data[key])
+			}
 		}
 	}
 }
 
 // game state handlers
+
+game.handlers.chat = function(message){
+	log.generic('chat', message)
+}
 
 game.handlers.client_names = function(clients){
 	for (var i = 0; i < ui.elements.clients.length; i += 1){
@@ -69,19 +79,28 @@ game.handlers.my_id = function(id){
 	me.disabled = false
 }
 
-// ui handlers
+// ui handlers 
+ui.handlers.chat = function(e){
+	console.log(e)
+	if (e.keyCode !== 13){
+		return
+	}
+	var text = e.srcElement.value
+	if (text.charAt(0) === '/'){
+		var parts = text.split(' ', 1)
+		if (parts[1] === undefined){
+			parts[1] = ''
+		}
+		game.socket.transmit(parts[0], parts[1])
+	} else {
+		game.socket.transmit('say', text)
+	}
+	e.srcElement.value = ''
+}
 
 ui.handlers.on_rename = function(e){
 	game.socket.transmit('edit_name', e.srcElement.value)
 }
-ui.handlers.ignore_return = function(e){
-	//http://stackoverflow.com/questions/425274/prevent-line-paragraph-breaks-in-contenteditable
-	if (e.key === 13){
-		e.preventDefault();
-	}
-	e.srcElement.blur()
-}
-
  
 var apply_state = function(data){
 	for (var i = 0; i < game.grids.length; i++){
@@ -146,7 +165,7 @@ var prepare_elements = function(){
 	}
 	
 	ui.elements.chat = document.querySelector('#chat')
-	// ui.elements.chat.addEventListener('input', )
+	ui.elements.chat.addEventListener('keypress', ui.handlers.chat)
 	
 	ui.elements.clients = document.querySelectorAll('#clients input')
 	for (var i = 0; i < ui.elements.clients.length; i += 1){

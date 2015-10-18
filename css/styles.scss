@@ -62,7 +62,7 @@ $metagrid_spacing: 1vmin;
 }
 
 main { width: $main_width; }
-aside { width: 100vw - $main_width; }
+aside { width: 100vw - 1vw - $main_width; }
 #metagrid {
 	border-spacing: $metagrid_spacing;
 	border-width: $metagrid_border_width;
@@ -175,17 +175,10 @@ $o_color_bg:  lighten($o_color, 45);
 #log {
 	list-style-type: none;
 	padding: 0;
-}
-
-aside footer {
+	flex-grow: 1;
 	margin-top: 4px;
 	overflow-y: auto;
 	font-size: 1.2vw;
-	position: relative;
-	flex-grow: 1;
-}
-
-aside #log li {
 	padding: 0px 5px;
 }
 
