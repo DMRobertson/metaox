@@ -72,8 +72,7 @@ class MetaOXServer:
 	@asyncio.coroutine
 	def handle_edit_name(self, client, arg):
 		client.name = arg.strip()
-		#todo just broadcast updated name, not all
-		yield from self.broadcast_client_names(except_for=client)
+		yield from self.broadcast_client_names()
 	
 	@asyncio.coroutine
 	def broadcast_client_names(self, except_for=None):

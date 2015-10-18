@@ -7,5 +7,5 @@ state = {
 }
 
 Commands from client to server:
-	edit_name <newname>
-	
+	/edit_name <newname>
+	/say <text>

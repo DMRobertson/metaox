@@ -59,7 +59,9 @@ game.handlers.client_names = function(clients){
 	for (var i = 0; i < ui.elements.clients.length; i += 1){
 		var li = ui.elements.clients[i]
 		if (i < clients.length){
+			var pos = li.selectionStart
 			li.value = clients[i]
+			li.selectionStart = li.selectionEnd = pos
 			li.classList.remove('unused')
 		} else {
 			li.classList.add('unused')
@@ -85,13 +87,14 @@ ui.handlers.chat = function(e){
 	if (e.keyCode !== 13){
 		return
 	}
-	var text = e.srcElement.value
-	if (text.charAt(0) === '/'){
-		var parts = text.split(' ', 1)
-		if (parts[1] === undefined){
-			parts[1] = ''
+	var text = e.srcElement.value.trim()
+	var r = /^\/([A-Za-z][A-Za-z_]*)(?: (.+)$)?/
+	match = text.match(r)
+	if (match !== null){
+		if (match[2] === undefined){
+			match[2] = ''
 		}
-		game.socket.transmit(parts[0], parts[1])
+		game.socket.transmit(match[1], match[2])
 	} else {
 		game.socket.transmit('say', text)
 	}
