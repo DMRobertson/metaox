@@ -43,13 +43,14 @@
 		<aside>
 			<ul id="clients">
 				{% for i in range(config['max_clients'])%}
-				<li id="client{{i}}"></li>
+				<li><input type="text" id="client{{i}}" /></li>
 				{% endfor %}
 			</ul>
 			<footer>
 				<ul id="log">
 				</ul>
 			</footer>
+			<input type="text" id="chat" />
 		</aside>
 	</body>
 </html>

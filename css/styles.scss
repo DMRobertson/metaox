@@ -155,12 +155,21 @@ $o_color_bg:  lighten($o_color, 45);
 @include grid_and_color_cells(o, background, $o_color_bg, $o_color_bg);
 @include grid_and_color_cells(active, box-shadow, 0 0 5vmin $active_grid_color, $active_grid_color );
 
-/* Clients */
+/* Client list */
 #clients {
-	flex-grow: 0;
+	padding: 5px;
+	list-style: none;
+}
+
+#clients input {
+	width: 100%;
+	border: none;
+	line-height: normal;
+	background: none;
 }
 
 #clients .me { font-weight: bold; }
+#clients .unused { display: none; }
 
 /* The log */
 #log {
@@ -169,7 +178,7 @@ $o_color_bg:  lighten($o_color, 45);
 }
 
 aside footer {
-	margin-top: 1vmin;
+	margin-top: 4px;
 	overflow-y: auto;
 	font-size: 1.2vw;
 	position: relative;
@@ -182,4 +191,9 @@ aside #log li {
 
 #log .info  { background: lighten(blue, 45) }
 #log .error { background: lighten(red, 45) }
-#log .debug { color: #444; }
+#log .debug { color: #999; }
+
+/* */
+#chat {
+
+}

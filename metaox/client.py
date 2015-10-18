@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from .protocol import transmit_message
+from .protocol import transmit_state
 
 class Client:
 	def __init__(self, id, socket):
@@ -13,7 +13,7 @@ class Client:
 		return 'Client #{} ({}) at {}:{}'.format(
 		  self.id, self.name, self.socket.host, self.socket.port) 
 	
-	def send_message(self, type, data):
-		enc = yield from transmit_message(self.socket, type, data)
+	def transmit_state(self, data):
+		enc = yield from transmit_state(self.socket, data)
 		logging.debug('-> {} ({}): {}'.format(
 		  self.id, self.name, enc))

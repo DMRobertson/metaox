@@ -1,0 +1,11 @@
+Client state to be updated by the server:
+
+state = {
+	client_names -> list of strings
+	my_id        -> integer [0, maxclients)
+	
+}
+
+Commands from client to server:
+	edit_name <newname>
+	
