@@ -71,8 +71,8 @@ class MetaOXServer:
 	#handlers for client commands
 	@asyncio.coroutine
 	def handle_edit_name(self, client, arg):
-		client.name = arg.strip()
-		yield from self.broadcast_client_names()
+		client.name = arg
+		yield from self.broadcast_client_names(except_for=client)
 	
 	@asyncio.coroutine
 	def broadcast_client_names(self, except_for=None):
@@ -80,8 +80,10 @@ class MetaOXServer:
 		for i, c in enumerate(self.clients):
 			if c is except_for:
 				continue
-			data['my_id'] = i
 			self.add_task(c.transmit_state(data))
+			id = {'my_id' : i }
+			self.add_task(c.transmit_state(id))
+
 	
 	@asyncio.coroutine
 	def handle_say(self, client, arg):

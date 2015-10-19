@@ -21,7 +21,7 @@ var log = {
 		entry.innerText = message
 		var log = ui.elements.log
 		log.appendChild(entry)
-		log.scrollTop = log.clientHeight
+		log.scrollTop = log.scrollHeight
 	},
 	debug:    function(message){ log.generic('debug', message) },
 	error:    function(message){ log.generic('error', message) },
@@ -62,7 +62,7 @@ game.handlers.client_names = function(clients){
 		if (i < clients.length){
 			var pos = input.selectionStart
 			input.value = clients[i]
-			input.selectionStart = li.selectionEnd = pos
+			input.selectionStart = input.selectionEnd = pos
 			li.classList.remove('unused')
 		} else {
 			li.classList.add('unused')
@@ -91,7 +91,7 @@ ui.handlers.chat = function(e){
 	if (e.keyCode !== 13){
 		return
 	}
-	var text = e.srcElement.value.trim()
+	var text = e.srcElement.value
 	var r = /^\/([A-Za-z][A-Za-z_]*)(?: (.+)$)?/
 	match = text.match(r)
 	if (match !== null){
