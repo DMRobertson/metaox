@@ -18,7 +18,7 @@ var log = {
 	generic: function(type, message){
 		var entry = document.createElement('li')
 		entry.className = type
-		entry.innerText = message
+		entry.textContent = message
 		var log = ui.elements.log
 		log.appendChild(entry)
 		log.scrollTop = log.scrollHeight
@@ -91,7 +91,7 @@ ui.handlers.chat = function(e){
 	if (e.keyCode !== 13){
 		return
 	}
-	var text = e.srcElement.value
+	var text = e.target.value
 	var r = /^\/([A-Za-z][A-Za-z_]*)(?: (.+)$)?/
 	match = text.match(r)
 	if (match !== null){
@@ -102,11 +102,11 @@ ui.handlers.chat = function(e){
 	} else {
 		game.socket.transmit('say', text)
 	}
-	e.srcElement.value = ''
+	e.target.value = ''
 }
 
 ui.handlers.on_rename = function(e){
-	game.socket.transmit('edit_name', e.srcElement.value)
+	game.socket.transmit('edit_name', e.target.value)
 }
  
 var apply_state = function(data){
