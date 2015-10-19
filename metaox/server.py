@@ -7,7 +7,7 @@ from .config   import max_clients
 from .protocol import await_command
 
 class MetaOXServer:
-	def __init__(self, ip='localhost', port='8001'):
+	def __init__(self, ip='0.0.0.0', port='8001'):
 		self.ip = ip
 		self.port = port
 		
