@@ -26,15 +26,14 @@ main:before {
   vertical-align: middle; }
 
 aside {
+  /* Positioning only; the styling is below*/
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  background: #f7f7f7;
   height: 100%;
   display: flex;
-  flex-flow: column;
-  box-shadow: 0 0 20px #999999; }
+  flex-flow: column; }
 
 /* Responsive sizes*/
 main {
@@ -134,6 +133,12 @@ aside {
   box-shadow: 0 0 5vmin #fe3;
   border-color: #fe3; }
 
+/* The aside */
+aside {
+  background: #f7f7f7;
+  box-shadow: 0 0 20px #999999;
+  font-size: 1.2vmax; }
+
 /* Client list */
 #clients {
   padding: 5px;
@@ -166,7 +171,6 @@ aside {
   flex-grow: 1;
   margin-top: 4px;
   overflow-y: auto;
-  font-size: 1.2vw;
   padding: 0px 5px; }
 
 #log .info {

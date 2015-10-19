@@ -40,15 +40,14 @@ main:before {
 }
 
 aside {
+	/* Positioning only; the styling is below*/
 	position: fixed;
 	top: 0;
 	right: 0;
 	bottom: 0;
-	background: darken($page_background, 3);
 	height: 100%;
 	display: flex;
 	flex-flow: column;
-	box-shadow: 0 0 20px darken($page_background, 40);
 }
 
 /* Responsive sizes*/
@@ -148,6 +147,14 @@ $o_color_bg:  lighten($o_color, 45);
 .grid.o { background: $o_color_bg; }
 .grid.active { box-shadow: 0 0 5vmin $active_grid_color; border-color: $active_grid_color; }
 
+/* The aside */
+
+aside {
+	background: darken($page_background, 3);
+	box-shadow: 0 0 20px darken($page_background, 40);
+	font-size: 1.2vmax;
+}
+
 /* Client list */
 #clients {
 	padding: 5px;
@@ -177,7 +184,6 @@ $o_color_bg:  lighten($o_color, 45);
 	flex-grow: 1;
 	margin-top: 4px;
 	overflow-y: auto;
-	font-size: 1.2vw;
 	padding: 0px 5px;
 }
 
