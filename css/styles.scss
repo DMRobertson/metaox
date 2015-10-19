@@ -11,6 +11,7 @@
 $page_background: #fff;
 $cell_color: #fff;
 $grid_color: #888;
+$text_dimmed: #999;
 
 /* The high-level layout. We use two fixed elements, one to house the grid and another to house the chat log. */
 html, body {
@@ -47,6 +48,7 @@ aside {
 	height: 100%;
 	display: flex;
 	flex-flow: column;
+	box-shadow: 0 0 20px darken($page_background, 40);
 }
 
 /* Responsive sizes*/
@@ -61,40 +63,36 @@ $metagrid_spacing: 1vmin;
 	@error "Not enough space for grid";
 }
 
+$grid_font_size: 4vmin;
+
 main { width: $main_width; }
 aside { width: 100vw - 1vw - $main_width; }
 #metagrid {
 	border-spacing: $metagrid_spacing;
 	border-width: $metagrid_border_width;
 }
+.grid { border-width: ($subgrid_padding + $metagrid_spacing)/2; } 
 .cell  { 
 	width: $cell_size;
 	height: $cell_size;
 	border-width: $grid_line_width;
 }
-.cell.col1 { border-left-width:   $subgrid_padding; }
-.cell.col3 { border-right-width:  $subgrid_padding; }
-.cell.row1 { border-top-width:    $subgrid_padding; }
-.cell.row3 { border-bottom-width: $subgrid_padding; }
 
 /* fullscreen sizes */
 $fullscreen_scale: 100vw/$main_width;
 .fullscreen {
 	main { width: 100vw; }
-	aside { width: 0; }
+	aside { display: none; }
 	#metagrid {
 		border-spacing: $fullscreen_scale * $metagrid_spacing;
 		border-width: $fullscreen_scale * $metagrid_border_width;
 	}
+	.grid { border-width: $fullscreen_scale * ( $subgrid_padding + $metagrid_spacing ) / 2; } 
 	.cell  {
 		width: $fullscreen_scale * $cell_size;
 		height: $fullscreen_scale * $cell_size;
 		border-width: $fullscreen_scale * $grid_line_width;
 	}
-	.cell.col1 { border-left-width:   $fullscreen_scale * $subgrid_padding; }
-	.cell.col3 { border-right-width:  $fullscreen_scale * $subgrid_padding; }
-	.cell.row1 { border-top-width:    $fullscreen_scale * $subgrid_padding; }
-	.cell.row3 { border-bottom-width: $fullscreen_scale * $subgrid_padding; }
 }
 
 /* The grid */
@@ -107,10 +105,12 @@ $fullscreen_scale: 100vw/$main_width;
 	border-collapse: separate;
 	border-style: outset;
 	border-color: lighten($grid_color, 8);
-	font-size: 4vmin;
+	font-size: $grid_font_size;
 }
 
 .grid {
+	border-color: $cell_color;
+	border-style: solid;
 	background: $cell_color;
 }
 
@@ -134,27 +134,19 @@ $o_color:  red;
 
 .x {color: $x_color; } 
 .o {color: $o_color; }
-.x:before, .o:before { display: inline-block; }
-.x:before{ content: '\2717';  }
-.o:before { content: '\25EF'; font-size: 130%; font-weight: bold; vertical-align: middle; }
+.grid , #clients {
+	.x:before, .o:before { display: inline-block; line-height: 0;}
+	.x:before{ content: '\2717';  }
+	.o:before { content: '\25CB'; font-size: 180%; font-weight: bold; vertical-align: sub; }
+}
 
 $active_grid_color: #fe3;
 $x_color_bg:  lighten($x_color, 45);
 $o_color_bg:  lighten($o_color, 45);
 
-@mixin grid_and_color_cells($class, $key, $value, $color){
-	.grid.#{$class} { #{$key}: $value; }
-	.#{$class} {
-		.cell.col1 { border-left-color:   $color; }
-		.cell.col3 { border-right-color:  $color; }
-		.cell.row1 { border-top-color:    $color; }
-		.cell.row3 { border-bottom-color: $color; }
-	}
-}
-
-@include grid_and_color_cells(x, background, $x_color_bg, $x_color_bg);
-@include grid_and_color_cells(o, background, $o_color_bg, $o_color_bg);
-@include grid_and_color_cells(active, box-shadow, 0 0 5vmin $active_grid_color, $active_grid_color );
+.grid.x { background: $x_color_bg; }
+.grid.o { background: $o_color_bg; }
+.grid.active { box-shadow: 0 0 5vmin $active_grid_color; border-color: $active_grid_color; }
 
 /* Client list */
 #clients {
@@ -171,10 +163,7 @@ $o_color_bg:  lighten($o_color, 45);
 
 #clients .me { font-weight: bold; }
 #clients .unused { display: none; }
-
-#clients .x input, #clients .o input {
-	width: 90%;
-}
+#clients .x input, #clients .o input { width: 90%; }
 #clients .x:before, #clients .o:before {
 	width: 10%;
 	display: inline-block;
@@ -194,4 +183,8 @@ $o_color_bg:  lighten($o_color, 45);
 
 #log .info  { background: lighten(blue, 45) }
 #log .error { background: lighten(red, 45) }
-#log .debug { color: #999; }
+#log .debug { color: $text_dimmed; }
+
+/* Chat entry box */
+#chat {	color: $text_dimmed; margin: 5px; }
+#chat:focus { color: black; }

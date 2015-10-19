@@ -87,7 +87,6 @@ game.handlers.my_id = function(id){
 
 // ui handlers 
 ui.handlers.chat = function(e){
-	console.log(e)
 	if (e.keyCode !== 13){
 		return
 	}
@@ -105,10 +104,23 @@ ui.handlers.chat = function(e){
 	e.target.value = ''
 }
 
+ui.handlers.chat_blur =  function(e){
+	console.log('aaaa'+e.target.value+'bbb')
+	if (e.target.value === ''){
+		e.target.value = 'Send a message...'
+	}
+}
+ui.handlers.chat_focus = function(e){
+	if (e.target.value === 'Send a message...'){
+		e.target.value = ''
+	}
+}
+
 ui.handlers.on_rename = function(e){
 	game.socket.transmit('edit_name', e.target.value)
 }
- 
+
+// old handlers that I haven't gotten rid of yet
 var apply_state = function(data){
 	for (var i = 0; i < game.grids.length; i++){
 		game.grids[i].classList.remove("active")
@@ -173,6 +185,13 @@ var prepare_elements = function(){
 	
 	ui.elements.chat = document.querySelector('#chat')
 	ui.elements.chat.addEventListener('keypress', ui.handlers.chat)
+	ui.elements.chat.addEventListener('focus'   , ui.handlers.chat_focus)
+	ui.elements.chat.addEventListener('blur'    , ui.handlers.chat_blur)
+	//IE and Firefox do not reset the value of input elements when the page is refreshed.
+	ui.elements.chat.value = ''
+	//force a blur event
+	ui.elements.chat.focus()
+	ui.elements.chat.blur()
 	
 	ui.elements.clients = document.querySelectorAll('#clients input')
 	for (var i = 0; i < ui.elements.clients.length; i += 1){
