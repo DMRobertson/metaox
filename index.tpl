@@ -21,14 +21,14 @@
 	<body>
 		<main>
 			<table id="metagrid">
-				{% for i in range(1, 4) %}
+				{% for i in range(3) %}
 				<tr>
-					{% for j in range(1, 4) %}
+					{% for j in range(3) %}
 					<td>
 						<table class="grid row{{i}} col{{j}}" id="grid{{ i }}{{ j }}">
-							{% for k in range(1, 4) %}
+							{% for k in range(3) %}
 							<tr>
-								{% for l in range (1, 4) %}
+								{% for l in range (3) %}
 								<td class="cell row{{k}} col{{l}}" id="cell{{i}}{{j}}{{k}}{{l}}"></td>
 								{% endfor %}
 							</tr>
@@ -43,7 +43,7 @@
 		<aside>
 			<ul id="clients">
 				{% for i in range(config['max_clients'])%}
-				<li><input type="text" id="client{{i}}" /></li>
+				<li class="unused"><input type="text" id="client{{i}}" /></li>
 				{% endfor %}
 			</ul>
 			<ul id="log">

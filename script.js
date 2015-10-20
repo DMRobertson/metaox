@@ -1,7 +1,7 @@
 // game state
 
 var game = {
-	cell_state_names: ["empty", "o", "x"],
+	cell_state_names: ["empty", "o", "x", "drawn"],
 	handlers: {}
 }
 
@@ -9,7 +9,8 @@ var game = {
 
 var ui = {
 	elements: {},
-	handlers: {}
+	handlers: {},
+	util: {}
 }
 
 //logging etc
@@ -73,6 +74,32 @@ game.handlers.client_names = function(clients){
 	log.debug('Updated client list')
 }
 
+game.handlers.grids = function(grids){
+	for (var key in grids){
+		if (grids.hasOwnProperty(key)){
+			var i = grids[key][0]
+			var j = grids[key][1]
+			for (var n = 0; n < 9; n += 1){
+				var k = n % 3
+				var l = Math.floor(n / 3)
+				cell = document.getElementById('cell'+i+j+k+l)
+				ui.util.remove_cell_classes(cell)
+				cell.classList.add(game.cell_state_names[grids[key][n+2]])
+			}
+		}
+	}
+}
+
+game.handlers.metagrid = function(cells){
+	for (var k = 0; k < 9; k += 1){
+		var i = k % 3
+		var j = Math.floor(k / 3)
+		var grid = ui.elements.grids[k]
+		ui.util.remove_cell_classes(grid)
+		grid.classList.add(game.cell_state_names[cells[k]])
+	}
+}
+
 game.handlers.my_id = function(id){
 	for (var i = 0; i < ui.elements.clients.length; i += 1){ 
 		var input = ui.elements.clients[i]
@@ -118,6 +145,15 @@ ui.handlers.chat_focus = function(e){
 
 ui.handlers.on_rename = function(e){
 	game.socket.transmit('edit_name', e.target.value)
+}
+
+// ui utility functions 
+ui.util.remove_cell_classes = function(element){
+	for (key in game.cell_state_names){
+		if (game.cell_state_names.hasOwnProperty(key)){
+			element.classList.remove(game.cell_state_names[key])
+		}
+	}
 }
 
 // old handlers that I haven't gotten rid of yet
@@ -198,9 +234,11 @@ var prepare_elements = function(){
 		ui.elements.clients[i].addEventListener('input', ui.handlers.on_rename)
 	}
 	
-	ui.elements.grids = document.querySelectorAll('.metagrid .grid')
+	ui.elements.grids = document.querySelectorAll('#metagrid .grid')
 	
 	ui.elements.log = document.getElementById('log')
+	
+	ui.elements.metagrid = document.getElementById('#metagrid')
 }
 
 document.addEventListener("DOMContentLoaded", main, false);

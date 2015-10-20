@@ -1,10 +1,14 @@
 import asyncio
 import logging
 import websockets
+import re
 
 from .client   import Client
 from .config   import max_clients
+from .game     import Game
 from .protocol import await_command
+
+extract_mark_args = re.compile(r'([012]\s*)' * 4 + '([12])')
 
 class MetaOXServer:
 	def __init__(self, ip='0.0.0.0', port='8001'):
@@ -15,8 +19,7 @@ class MetaOXServer:
 		self.loop = None
 		
 		self.clients = []
-		self.player1 = None
-		self.player2 = None
+		self.game    = Game()
 	
 	def launch(self):
 		self.loop = asyncio.get_event_loop()
@@ -48,7 +51,8 @@ class MetaOXServer:
 		logging.info("New client {}".format(c))
 		
 		self.clients.append(c)
-		self.add_task(self.broadcast_client_names())
+		self.broadcast_client_names()
+		self.broadcast_grids(only_client=c)
 		
 		while True:
 			response = yield from await_command(socket)
@@ -62,19 +66,17 @@ class MetaOXServer:
 				logging.error("No handler for {} command from {}. Arg: {}".format(
 				  command, c, arg))
 			else:
-				yield from handler(c, arg)
+				handler(c, arg)
 		
 		#When connection is lost:
 		self.clients.remove(c)
-		self.add_task(self.broadcast_client_names())
+		self.broadcast_client_names()
 	
 	#handlers for client commands
-	@asyncio.coroutine
 	def handle_edit_name(self, client, arg):
 		client.name = arg
 		yield from self.broadcast_client_names(except_for=client)
 	
-	@asyncio.coroutine
 	def broadcast_client_names(self, except_for=None):
 		data = {'client_names': [c.name for c in self.clients] }
 		for i, c in enumerate(self.clients):
@@ -83,9 +85,35 @@ class MetaOXServer:
 			self.add_task(c.transmit_state(data))
 			id = {'my_id' : i }
 			self.add_task(c.transmit_state(id))
-
 	
-	@asyncio.coroutine
+	def handle_mark(self, client, arg):
+		match = extract_mark_args.match(arg.strip())
+		if match is None:
+			... #respond with an error message
+		i, j, k, l, player_num = [int(x) for x in match.groups()]
+		#check client is player player_num
+		try:
+			self.game.mark(i, j, k, l, player_num)
+		except Exception:
+			raise #... #inform client
+		else:
+			self.broadcast_grids(only_grid=(i, j))
+	
+	def broadcast_grids(self, only_grid=None, only_client=None):
+		data = {}
+		if only_grid is not None:
+			data['grids'] = [self.game.dump_grid(*only_grid)]
+		else:
+			data['grids'] = [self.game.dump_grid(i, j) for i in range(3) for j in range(3)]
+		data['metagrid'] = self.game.metagrid.dump()
+		
+		if only_client is not None:
+			clients = [only_client]
+		else:
+			clients = self.clients
+		for c in clients:
+			self.add_task(c.transmit_state(data))
+	
 	def handle_say(self, client, arg):
 		data = {'chat': '{}: {}'.format(client.name, arg) }
 		for c in self.clients:
