@@ -8,7 +8,7 @@ from .config   import max_clients
 from .game     import Game
 from .protocol import await_command
 
-extract_mark_args = re.compile(r'([012]\s*)' * 4 + '([12])')
+extract_mark_args = re.compile(r'([012]\s*)' * 4)
 
 class MetaOXServer:
 	def __init__(self, ip='0.0.0.0', port='8001'):

@@ -9,17 +9,18 @@ class Game:
 	def reset(self):
 		self.grids = { (i, j) : Grid() for i in range(3) for j in range(3) }
 		self.metagrid = Grid()
-		self.turn = random.choice([Cell.player1, Cell.player2])
+		self.player_num = random.randint(1, 2)
+		
 		x = random.randint(0, 8)
 		self.active_grid = (x % 3, x // 3)
 	
-	def mark(self, i, j, k, l, value):
+	def mark(self, i, j, k, l):
 		if (i, j) != self.active_grid:
 			raise KeyError('Cannot mark a non-active grid')
-		if value != self.turn.value:
-			raise ValueError('It is player {}\'s turn to mark.'.format(self.turn.value))
 		grid = self.grids[i, j]
-		grid.mark(k, l, value)
+		grid.mark(k, l, Cell(self.player_num))
+		#swap p1 and p2
+		self.player_num = 3 - self.player_num
 		self.active_grid = (k, l)
 		
 		result = grid.test_victory()
