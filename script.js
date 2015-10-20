@@ -32,9 +32,9 @@ var log = {
 
 // websocket handlers
 
-var socket_connected = function(e){ log.info('WebSocket connection established.') }
-var socket_closed    = function(e){ log.info('WebSocket connection closed.')      }
-var socket_error     = function(e){ log.error('WebSocket error' + e.message)      }
+var socket_connected = function(e){ log.info('Connected to server.') }
+var socket_closed    = function(e){ log.error('Lost connection to server: code ' + e.code) }
+var socket_error     = function(e){ log.error('Unspecified WebSocket error.') }
 var socket_message = function(e){
 	log.debug(e.data)
 	data = JSON.parse(e.data)
@@ -51,6 +51,14 @@ var socket_message = function(e){
 }
 
 // game state handlers
+
+game.handlers.active = function(coords){
+	for (var n = 0; n < ui.elements.grids.length; n += 1){
+		ui.elements.grids[n].classList.remove("active")
+	}
+	var n = 3 * coords[0] + coords[1]
+	ui.elements.grids[n].classList.add("active")
+}
 
 game.handlers.chat = function(message){
 	log.generic('chat', message)
@@ -80,8 +88,8 @@ game.handlers.grids = function(grids){
 			var i = grids[key][0]
 			var j = grids[key][1]
 			for (var n = 0; n < 9; n += 1){
-				var k = n % 3
-				var l = Math.floor(n / 3)
+				var k = Math.floor(n / 3)
+				var l = n % 3
 				cell = document.getElementById('cell'+i+j+k+l)
 				ui.util.remove_cell_classes(cell)
 				cell.classList.add(game.cell_state_names[grids[key][n+2]])
@@ -113,6 +121,15 @@ game.handlers.my_id = function(id){
 }
 
 // ui handlers 
+ui.handlers.cell = function(e){
+	var cell = e.target
+	var grid = cell.parentElement.parentElement.parentElement
+	if (cell.classList.contains("empty") && grid.classList.contains("active")){
+		id = cell.id.substring(4)
+		game.socket.transmit('mark', id)
+	}
+}
+
 ui.handlers.chat = function(e){
 	if (e.keyCode !== 13){
 		return
@@ -132,7 +149,6 @@ ui.handlers.chat = function(e){
 }
 
 ui.handlers.chat_blur =  function(e){
-	console.log('aaaa'+e.target.value+'bbb')
 	if (e.target.value === ''){
 		e.target.value = 'Send a message...'
 	}
@@ -148,51 +164,12 @@ ui.handlers.on_rename = function(e){
 }
 
 // ui utility functions 
+
 ui.util.remove_cell_classes = function(element){
 	for (key in game.cell_state_names){
 		if (game.cell_state_names.hasOwnProperty(key)){
 			element.classList.remove(game.cell_state_names[key])
 		}
-	}
-}
-
-// old handlers that I haven't gotten rid of yet
-var apply_state = function(data){
-	for (var i = 0; i < game.grids.length; i++){
-		game.grids[i].classList.remove("active")
-		set_cell_state(game.grids[i], data['grids'][i])
-	}
-	i = data['active'][0] + 3 * data['active'][1]
-	game.grids[i].classList.add("active")
-	
-	for (var i = 0; i < game.cells.length; i++){
-		set_cell_state(game.cells[i], data['board'][i])
-	}
-}
-
-var cell_handler = function(e){
-
-}
-
-var set_cell_state = function (element, state){
-	if (typeof state === "number"){
-		state = game.cell_state_names[state]
-	}
-	switch (state){
-		case 'x':
-			element.classList.add("x")
-			element.classList.remove("o")
-			break;
-		case 'o':
-			element.classList.add("o")
-			element.classList.remove("x")
-			break;
-		case 'empty':
-			element.classList.remove("x")
-			element.classList.remove("o")
-			break;
-		default:
-			throw new Error("Unrecognised state: " + state)
 	}
 }
 
@@ -216,7 +193,7 @@ var main = function(){
 var prepare_elements = function(){
 	ui.elements.cells = document.querySelectorAll('.cell')
 	for (var i = 0; i < ui.elements.cells.length; i++){
-		ui.elements.cells[i].addEventListener("click", cell_handler, true)
+		ui.elements.cells[i].addEventListener("click", ui.handlers.cell)
 	}
 	
 	ui.elements.chat = document.querySelector('#chat')

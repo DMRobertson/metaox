@@ -22,7 +22,18 @@ class Client:
 		return 'Client #{} ({})'.format(
 		  self.id, self.name) 
 	
+	@asyncio.coroutine
 	def transmit_state(self, data):
 		enc = yield from transmit_state(self.socket, data)
 		logging.debug('-> {} ({}): {}'.format(
 		  self.id, self.name, enc))
+	
+	@asyncio.coroutine
+	def inform(self, message):
+		yield from self.transmit_state({'info': message})
+	
+	@asyncio.coroutine
+	def error(self, message):
+		if isinstance(message, Exception):
+			message = ";".join(arg for arg in message.args)
+		yield from self.transmit_state({'error': message})

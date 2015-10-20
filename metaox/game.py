@@ -14,10 +14,14 @@ class Game:
 		self.active_grid = (x % 3, x // 3)
 	
 	def mark(self, i, j, k, l, value):
-		# if value != self.turn.value:
-			# raise ValueError #todo message here
+		if (i, j) != self.active_grid:
+			raise KeyError('Cannot mark a non-active grid')
+		if value != self.turn.value:
+			raise ValueError('It is player {}\'s turn to mark.'.format(self.turn.value))
 		grid = self.grids[i, j]
 		grid.mark(k, l, value)
+		self.active_grid = (k, l)
+		
 		result = grid.test_victory()
 		if result != Cell.empty:
 			self.metagrid.cells[i, j] = result

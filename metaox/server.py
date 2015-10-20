@@ -19,7 +19,7 @@ class MetaOXServer:
 		self.loop = None
 		
 		self.clients = []
-		self.game    = Game()
+		self.game = Game()
 	
 	def launch(self):
 		self.loop = asyncio.get_event_loop()
@@ -87,15 +87,18 @@ class MetaOXServer:
 			self.add_task(c.transmit_state(id))
 	
 	def handle_mark(self, client, arg):
+		#check it's this client's turn to mark
+		
 		match = extract_mark_args.match(arg.strip())
 		if match is None:
-			... #respond with an error message
-		i, j, k, l, player_num = [int(x) for x in match.groups()]
-		#check client is player player_num
+			self.add_task(client.inform('Could not parse mark instruction'))
+			return
+		
+		i, j, k, l = [int(x) for x in match.groups()]
 		try:
-			self.game.mark(i, j, k, l, player_num)
-		except Exception:
-			raise #... #inform client
+			self.game.mark(i, j, k, l)
+		except Exception as e:
+			self.add_task(client.error(e))
 		else:
 			self.broadcast_grids(only_grid=(i, j))
 	
@@ -105,7 +108,9 @@ class MetaOXServer:
 			data['grids'] = [self.game.dump_grid(*only_grid)]
 		else:
 			data['grids'] = [self.game.dump_grid(i, j) for i in range(3) for j in range(3)]
+			
 		data['metagrid'] = self.game.metagrid.dump()
+		data['active'] = self.game.active_grid
 		
 		if only_client is not None:
 			clients = [only_client]

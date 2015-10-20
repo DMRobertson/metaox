@@ -25,7 +25,7 @@
 				<tr>
 					{% for j in range(3) %}
 					<td>
-						<table class="grid row{{i}} col{{j}}" id="grid{{ i }}{{ j }}">
+						<table class="grid row{{i}} col{{j}}" id="grid{{i}}{{j}}">
 							{% for k in range(3) %}
 							<tr>
 								{% for l in range (3) %}

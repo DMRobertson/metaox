@@ -130,22 +130,27 @@ $fullscreen_scale: 100vw/$main_width;
 /*  Styles for showing game state */
 $x_color:  blue;
 $o_color:  red;
+$active_grid_color: #fe3;
+$x_color_bg:  lighten($x_color, 45);
+$o_color_bg:  lighten($o_color, 45);
 
 .x {color: $x_color; } 
 .o {color: $o_color; }
+.grid.o { background: $o_color_bg; box-shadow: inset 0 0 $cell_size lighten($o_color, 30); }
+.grid.x { background: $x_color_bg; box-shadow: inset 0 0 $cell_size lighten($x_color, 30); }
+.grid.drawn{ opacity: 0.75; } 
+
 .grid , #clients {
 	.x:before, .o:before { display: inline-block; line-height: 0;}
 	.x:before{ content: '\2717';  }
 	.o:before { content: '\25CB'; font-size: 180%; font-weight: bold; vertical-align: sub; }
 }
 
-$active_grid_color: #fe3;
-$x_color_bg:  lighten($x_color, 45);
-$o_color_bg:  lighten($o_color, 45);
-
-.grid.x { background: $x_color_bg; }
-.grid.o { background: $o_color_bg; }
 .grid.active { box-shadow: 0 0 5vmin $active_grid_color; border-color: $active_grid_color; }
+.active .cell.empty:hover {
+	background: rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+}
 
 /* The aside */
 
