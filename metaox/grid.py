@@ -13,6 +13,12 @@ class Grid:
 	def __str__(self):
 		return ''.join(str(self.cells[k, l].value) for k in range(3) for l in range(3) )
 	
+	def __getitem__(self, key):
+		return self.cells.__getitem__(key)
+	
+	def __setitem__(self, key, value):
+		self.cells[key] = value
+	
 	def reset(self):
 		self.cells = { (k, l) : Cell.empty for k in range(3) for l in range(3) }
 	

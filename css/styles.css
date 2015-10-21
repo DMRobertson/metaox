@@ -121,8 +121,7 @@ aside {
   box-shadow: inset 0 0 7vmin #9999ff; }
 
 .grid.drawn {
-  opacity: 0.75;
-  }
+  opacity: 0.75; }
 
 .grid .x:before, .grid .o:before, #clients .x:before, #clients .o:before {
   display: inline-block;
@@ -190,6 +189,7 @@ aside {
   background: #ffe6e6; }
 
 #log .debug {
+  display: none;
   color: #999; }
 
 /* Chat entry box */

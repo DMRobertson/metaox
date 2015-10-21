@@ -6,6 +6,7 @@ import re
 from .client   import Client
 from .config   import max_clients
 from .game     import Game
+from .grid     import Cell
 from .protocol import await_command
 
 extract_mark_args = re.compile(r'([012]\s*)' * 4)
@@ -96,11 +97,12 @@ class MetaOXServer:
 		
 		i, j, k, l = [int(x) for x in match.groups()]
 		try:
-			self.game.mark(i, j, k, l)
+			result = self.game.mark(i, j, k, l)
 		except Exception as e:
 			self.add_task(client.error(e))
 		else:
-			self.broadcast_grids(only_grid=(i, j))
+			metaresult = self.broadcast_grids(only_grid=(i, j))
+			#todo handle metaresult = draw, p1, p2 here
 	
 	def broadcast_grids(self, only_grid=None, only_client=None):
 		data = {}
@@ -123,6 +125,12 @@ class MetaOXServer:
 		data = {'chat': '{}: {}'.format(client.name, arg) }
 		for c in self.clients:
 			self.add_task(c.transmit_state(data))
+	
+	def handle_reset(self, client, arg):
+		self.game.reset()
+		for c in self.clients:
+			self.add_task(c.inform('New game!'))
+		self.broadcast_grids()
 
 def do_nothing(seconds=1):
 	"""Signals like the KeyboardInterrupt are not supported on windows. This workaround forces the event loop to 'check' for keyboard interrupts once a second. See http://bugs.python.org/issue23057"""

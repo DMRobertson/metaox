@@ -194,7 +194,7 @@ aside {
 
 #log .info  { background: lighten(blue, 45) }
 #log .error { background: lighten(red, 45) }
-#log .debug { color: $text_dimmed; }
+#log .debug { display: none; color: $text_dimmed; }
 
 /* Chat entry box */
 #chat {	color: $text_dimmed; margin: 5px; }
