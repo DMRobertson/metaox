@@ -76,7 +76,7 @@ class MetaOXServer:
 	#handlers for client commands
 	def handle_edit_name(self, client, arg):
 		client.name = arg
-		yield from self.broadcast_client_names(except_for=client)
+		self.broadcast_client_names(except_for=client)
 	
 	def broadcast_client_names(self, except_for=None):
 		data = {'client_names': [c.name for c in self.clients] }

@@ -17,7 +17,7 @@ class Client:
 		if match:
 			self.name = match.groups()[0]
 		else:
-			self.name = "client {}".format(id)
+			self.name = dns_name
 	def __str__(self):
 		return 'Client #{} ({})'.format(
 		  self.id, self.name) 
